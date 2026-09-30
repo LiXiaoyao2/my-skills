@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# 编辑器 / IDE
+.idea/
+.vscode/
+*.swp
+
+# 技能运行产物
+*.AppImage
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
