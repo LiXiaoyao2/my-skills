@@ -50,6 +50,7 @@ rm ~/.claude/skills/dsh-linux-desktop ~/.cc-switch/skills/dsh-linux-desktop
 | 技能 | 说明 |
 |---|---|
 | [dsh-linux-desktop](dsh-linux-desktop/) | 从官方源码构建 DeepSeek Harness 桌面端的 Linux x64 AppImage。官方不发布 Linux 包且构建流水线硬编码拒绝 Linux，需要打 11 处锚点补丁。 |
+| [xiaoe-course-library](xiaoe-course-library/) | 把小鹅通付费课程完整归档到本地，下载全部视频并生成带章节树、断点续播、进度与笔记的本地学习网页库。 |
 
 ## 约定
 
