@@ -66,3 +66,25 @@ rm ~/.claude/skills/dsh-linux-desktop ~/.cc-switch/skills/dsh-linux-desktop
 - 技能里不要写死绝对路径，用 `~` 或相对自身目录的路径
 - 脚本要可重复运行（幂等），失败时明确报错而非静默跳过
 - 改动应用源码时，尽量把修改收敛在构建/配置层，并保持应用逻辑零改动
+
+## 来源与许可
+
+本仓库为个人技术笔记与工具集合。
+
+- `skills/dsh-linux-desktop/` 中的分析与补丁针对
+  [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness)
+  （**MIT License**，Copyright DeepSeek）。该技能不包含其源码分发，仅含分析文档、
+  以及在构建时对其脚本做定点替换的补丁脚本。引用代码片段用于说明问题，符合 MIT 条款。
+- `skills/xiaoe-course-library/` 为原创工具，与任何第三方无关。其功能涉及第三方
+  付费课程的内容归档，**仅供个人学习与备份使用**，请遵守课程版权方与小鹅通的服务条款，
+  不要传播下载的内容。
+
+## 在 cc-switch 中使用
+
+添加技能仓库时填 `LiXiaoyao2/my-skills`。
+
+> ⚠️ 该功能通过匿名方式下载 `https://github.com/{owner}/{repo}/archive/refs/heads/{branch}.zip`，
+> **只支持公开仓库**。私有仓库会返回 404（GitHub 用 404 而非 403 以避免泄露仓库存在性），
+> 且 cc-switch 未提供配置 GitHub 凭据的入口 —— 二进制里的 `github_token` 属于
+> Copilot OAuth，与技能下载无关。
+
