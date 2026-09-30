@@ -59,7 +59,10 @@ rm ~/.claude/skills/dsh-linux-desktop ~/.cc-switch/skills/dsh-linux-desktop
 | 技能 | 说明 |
 |---|---|
 | [dsh-linux-desktop](skills/dsh-linux-desktop/) | 从官方源码构建 DeepSeek Harness 桌面端的 Linux x64 AppImage。官方不发布 Linux 包且构建流水线硬编码拒绝 Linux，需要打 11 处锚点补丁。 |
-| [xiaoe-course-library](skills/xiaoe-course-library/) | 把小鹅通付费课程完整归档到本地，下载全部视频并生成带章节树、断点续播、进度与笔记的本地学习网页库。 |
+
+本仓库只放**通用技能**。领域专用、内容敏感或需要独立版本历史的技能，放在各自专属的
+私有仓库维护，不并入这里（例如小鹅通课程归档工具，仓库地址 `LiXiaoyao2/xiaoe-course-archiver`，
+其技能位于该仓库的 `skill/` 目录）。
 
 ## 约定
 
@@ -75,9 +78,6 @@ rm ~/.claude/skills/dsh-linux-desktop ~/.cc-switch/skills/dsh-linux-desktop
   [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness)
   （**MIT License**，Copyright DeepSeek）。该技能不包含其源码分发，仅含分析文档、
   以及在构建时对其脚本做定点替换的补丁脚本。引用代码片段用于说明问题，符合 MIT 条款。
-- `skills/xiaoe-course-library/` 为原创工具，与任何第三方无关。其功能涉及第三方
-  付费课程的内容归档，**仅供个人学习与备份使用**，请遵守课程版权方与小鹅通的服务条款，
-  不要传播下载的内容。
 
 ## 在 cc-switch 中使用
 
