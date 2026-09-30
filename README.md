@@ -1,7 +1,7 @@
 # my-skills
 
-个人技能仓库。每个技能是仓库根目录下的一个独立子目录，目录内含一个 `SKILL.md`，
-可直接安装到 Claude Code / minimax Code 的技能目录。
+个人技能仓库。技能放在 `skills/` 子目录下，每个技能一个独立目录，内含 `SKILL.md`，
+可被 cc-switch 直接识别并安装到 Claude Code / minimax Code / Codex 的技能目录。
 
 私有仓库，不对外公开。
 
@@ -10,27 +10,35 @@
 ```
 my-skills/
 ├── README.md
-└── <技能名>/
-    ├── SKILL.md          必需：YAML frontmatter + 技能说明
-    ├── scripts/          可选：可执行脚本
-    ├── references/       可选：按需加载的参考文档
-    └── assets/           可选：输出用模板/资源
+└── skills/                   ← 必须存在，cc-switch 按此目录发现技能
+    └── <技能名>/
+        ├── SKILL.md          必需：YAML frontmatter + 技能说明
+        ├── scripts/          可选：可执行脚本
+        ├── references/       可选：按需加载的参考文档
+        └── assets/           可选：输出用模板/资源
 ```
+
+> ⚠️ **`skills/` 这一层不能省。** 技能目录必须放在 `skills/` 下，不能直接放在仓库根目录。
+> 少了这层，cc-switch 扫描时会报 `SKILL_DIR_NOT_FOUND`，技能列表里一个都看不到。
+> 对照 `obra/superpowers`、`anthropics/skills`、`MiniMax-AI/skills`、
+> `JimLiu/baoyu-skills` 这四个能被识别的仓库，顶层都是 `skills/`。
 
 ## 安装某个技能
 
-把技能目录软链到技能搜索路径即可（本机是 `~/.cc-switch/skills`，再由
+在 cc-switch 里添加本仓库（`LiXiaoyao2/my-skills`）后，直接从界面安装即可。
+
+手动安装则把技能目录软链到技能搜索路径（本机是 `~/.cc-switch/skills`，再由
 `~/.claude/skills` 软链过去）：
 
 ```bash
-ln -s "$PWD/dsh-linux-desktop" ~/.cc-switch/skills/dsh-linux-desktop
+ln -s "$PWD/skills/dsh-linux-desktop" ~/.cc-switch/skills/dsh-linux-desktop
 ln -s ~/.cc-switch/skills/dsh-linux-desktop ~/.claude/skills/dsh-linux-desktop
 ```
 
 或直接复制：
 
 ```bash
-cp -r dsh-linux-desktop ~/.claude/skills/
+cp -r skills/dsh-linux-desktop ~/.claude/skills/
 ```
 
 ## 卸载
@@ -41,16 +49,17 @@ rm ~/.claude/skills/dsh-linux-desktop ~/.cc-switch/skills/dsh-linux-desktop
 
 ## 新增技能
 
-1. 建 `<技能名>/SKILL.md`，frontmatter 至少含 `name` 和 `description`
+1. 建 `skills/<技能名>/SKILL.md`，frontmatter 至少含 `name` 和 `description`
 2. `description` 决定触发准确率，写清「做什么」和「什么情况下用」
 3. 提交推送：`git add . && git commit -m "..." && git push`
+4. 在 cc-switch 里刷新本仓库，新技能即可被发现
 
 ## 现有技能
 
 | 技能 | 说明 |
 |---|---|
-| [dsh-linux-desktop](dsh-linux-desktop/) | 从官方源码构建 DeepSeek Harness 桌面端的 Linux x64 AppImage。官方不发布 Linux 包且构建流水线硬编码拒绝 Linux，需要打 11 处锚点补丁。 |
-| [xiaoe-course-library](xiaoe-course-library/) | 把小鹅通付费课程完整归档到本地，下载全部视频并生成带章节树、断点续播、进度与笔记的本地学习网页库。 |
+| [dsh-linux-desktop](skills/dsh-linux-desktop/) | 从官方源码构建 DeepSeek Harness 桌面端的 Linux x64 AppImage。官方不发布 Linux 包且构建流水线硬编码拒绝 Linux，需要打 11 处锚点补丁。 |
+| [xiaoe-course-library](skills/xiaoe-course-library/) | 把小鹅通付费课程完整归档到本地，下载全部视频并生成带章节树、断点续播、进度与笔记的本地学习网页库。 |
 
 ## 约定
 
