@@ -152,3 +152,6 @@ bash ~/.cc-switch/skills/dsh-web-service/scripts/uninstall.sh
 - `scripts/dsh-web-url` —— 取当前地址
 - `references/auth-and-tokens.md` —— 认证机制实测细节、cookie 结构、
   token 为何无法固定、代理方案思路、与密钥环无关的排除过程
+- `references/updating-dsh-cli.md` —— dsh 是静态全局 npm 包、不会自我更新；
+  必须走官方源（npmmirror 会漏掉平台二进制包）、显式带代理、避开 `uv_cwd ENOENT`、
+  就绪信号是日志行而非端口
