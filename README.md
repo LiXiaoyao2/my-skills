@@ -59,6 +59,7 @@ rm ~/.claude/skills/dsh-linux-desktop ~/.cc-switch/skills/dsh-linux-desktop
 | 技能 | 说明 |
 |---|---|
 | [dsh-linux-desktop](skills/dsh-linux-desktop/) | 从官方源码构建 DeepSeek Harness 桌面端的 Linux x64 AppImage。官方不发布 Linux 包且构建流水线硬编码拒绝 Linux，需要打 11 处锚点补丁。 |
+| [dsh-web-service](skills/dsh-web-service/) | 把 dsh 的 web 版注册成 systemd 用户服务常驻。解决 token 认证（裸地址必 401）、端口冲突、启动 URL 丢失三个痛点；也用于判断该不该常驻，以及怎么拆掉回归手动 `dsh web`。 |
 
 本仓库只放**通用技能**。领域专用、内容敏感或需要独立版本历史的技能，放在各自专属的
 私有仓库维护，不并入这里（例如小鹅通课程归档工具，仓库地址 `LiXiaoyao2/xiaoe-course-archiver`，
@@ -78,6 +79,8 @@ rm ~/.claude/skills/dsh-linux-desktop ~/.cc-switch/skills/dsh-linux-desktop
   [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness)
   （**MIT License**，Copyright DeepSeek）。该技能不包含其源码分发，仅含分析文档、
   以及在构建时对其脚本做定点替换的补丁脚本。引用代码片段用于说明问题，符合 MIT 条款。
+- `skills/dsh-web-service/` 记录的是同一个上游的 web 版行为（认证流程、cookie
+  结构、配置面），同样只含实测结论与自建脚本，不分发其源码。
 
 ## 在 cc-switch 中使用
 

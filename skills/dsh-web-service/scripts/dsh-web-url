@@ -1,0 +1,36 @@
+#!/bin/bash
+# 打印当前 dsh web 带 token 的访问地址。
+#   dsh-web-url          打印地址
+#   dsh-web-url --open   顺便用默认浏览器打开
+#
+# 存在的理由：dsh 的 token 每次进程启动重新随机生成，裸地址
+# http://127.0.0.1:3080/ 永远 401。看到 401 就该跑这个，而不是去查防火墙或重启浏览器。
+set -uo pipefail
+
+URL_FILE="${DSH_WEB_URL_FILE:-$HOME/.local/state/dsh-web/url.txt}"
+RECO='https?://[^ '"'"'"]*token=[A-Za-z0-9._-]+'
+
+if [ ! -f "$URL_FILE" ]; then
+  echo "dsh-web-url: 还没有记录，dsh web 可能没通过本方案启动过。" >&2
+  echo "  查状态: systemctl --user status dsh-web" >&2
+  echo "  或直接看 journal: journalctl --user-unit dsh-web -b | grep -a 'dsh web:'" >&2
+  exit 1
+fi
+
+url=$(grep -aoE "$RECO" "$URL_FILE" 2>/dev/null | head -1)
+if [ -z "$url" ]; then
+  echo "dsh-web-url: 文件在但没有可用地址（服务多半已停止或正在重启）：" >&2
+  sed 's/^/  /' "$URL_FILE" >&2
+  echo "  修复: systemctl --user restart dsh-web" >&2
+  exit 1
+fi
+
+if [ "${1:-}" = "--open" ]; then
+  if command -v xdg-open >/dev/null 2>&1 && xdg-open "$url" >/dev/null 2>&1; then
+    echo "已在浏览器打开: $url"
+    exit 0
+  fi
+  echo "xdg-open 打不开，请手动访问下面的地址：" >&2
+fi
+
+echo "$url"
