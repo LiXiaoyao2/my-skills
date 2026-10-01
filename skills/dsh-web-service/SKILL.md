@@ -108,6 +108,14 @@ SIGKILL，会留下孤儿 node 进程占着端口。
 - **`pkill -f` / `pgrep -f` 会匹配到自己的命令行。** 用字符类：
   `pgrep -f "[d]sh web"` 而不是 `pgrep -f "dsh web"`。否则 shell 会把自己杀掉。
 
+- **`set -o pipefail` 下别用 `cmd | grep -q`。** `grep -q` 命中即退出，上游进程
+  收到 SIGPIPE（141），`pipefail` 把整条管道判为失败，条件随机为假。实测同一段
+  `systemctl --user list-unit-files | grep -q "^foo.service"` 连跑六次得到
+  `FTFFTF`。这个坑在本技能里造成过真实故障：unit 存在性判断随机漏检 → 服务没停
+  就把 unit 删了 → 留下占着 3080 的孤儿进程，下次手动 `dsh web` 直接撞
+  EADDRINUSE。写判断请用 `grep -c`（读完整个输入，无竞态），或干脆不用管道、
+  直接看命令退出码。
+
 - **别用 `gh` 的 token 做 GitHub 操作。** 它常处于失效状态；这台机器上
   `gh auth status` 报 token invalid，但 SSH 推送是通的，直接用 `git push`。
 

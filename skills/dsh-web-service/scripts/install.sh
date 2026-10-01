@@ -89,15 +89,20 @@ for _ in $(seq 1 30); do
   [ -s "$URL_FILE" ] && grep -aq 'token=' "$URL_FILE" 2>/dev/null && break
 done
 
-if systemctl --user is-active --quiet dsh-web.service; then
-  ACTIVE_PORT="$(ss -H -ltnp "sport = :$BASE_PORT" 2>/dev/null | grep -o "127.0.0.1:[0-9]*" | head -1)"
-  say "==> 运行中"
-else
+if ! systemctl --user is-active --quiet dsh-web.service; then
   say "==> 警告：服务当前不是 active，看日志: journalctl --user-unit dsh-web -b -n 50" >&2
 fi
 
 URL="$($BIN_DIR/dsh-web-url 2>/dev/null || true)"
 if [ -n "$URL" ]; then
+  # 端口要从 URL 里解析，不能去问"3080 有没有人听" ——
+  # 那样只能说明 3080 被占，猜不出 dsh 实际落在哪个端口。
+  UPORT="$(printf '%s\n' "$URL" | sed -n 's|^http[s]*://[^:]*:\([0-9]\+\)/.*|\1|p')"
+  if [ "$UPORT" = "$BASE_PORT" ]; then
+    say "==> 运行中（端口 $BASE_PORT）"
+  else
+    say "==> 运行中（$BASE_PORT 被占，已避让到 ${UPORT:-未知端口}）"
+  fi
   say ""
   say "    访问地址（先打开这个一次，之后裸地址免 token 30 天）:"
   say "    $URL"

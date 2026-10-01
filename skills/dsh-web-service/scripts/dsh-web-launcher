@@ -28,9 +28,14 @@ fi
 mkdir -p "$(dirname "$URL_FILE")" || exit 1
 
 # ---- 端口探测 ----
+# 用 grep -c 而不是 grep -q：grep -q 命中即退出会让上游 ss 收到 SIGPIPE，
+# set -o pipefail 下整条管道被判失败，于是"端口被占"被误判成"端口空闲"，
+# 然后 dsh 以 EADDRINUSE 崩掉。grep -c 读完整个输入，没有这个竞态。
 port_in_use() {
+  local n
   if command -v ss >/dev/null 2>&1; then
-    ss -H -ltn "sport = :$1" 2>/dev/null | grep -q .
+    n=$(ss -H -ltn "sport = :$1" 2>/dev/null | grep -c . || true)
+    [ "${n:-0}" -gt 0 ]
   else
     # 没有 ss 时退回 bash 的 /dev/tcp：连得上说明有人在听
     (exec 3<>"/dev/tcp/127.0.0.1/$1") 2>/dev/null && { exec 3<&- 3>&-; return 0; }
